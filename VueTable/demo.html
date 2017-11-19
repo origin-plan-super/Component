@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue数据表格组件</title>
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+
+</head>
+
+<body>
+
+    <h1>as</h1>
+    <table id="demoTable">
+
+    </table>
+
+
+    <script src="vue.js"></script>
+    <script src="../vendor/jquery/jquery.js"></script>
+    <script src="../LogTool/LogTool.js"></script>
+    <script src="VueTable.js"></script>
+
+    <script>
+
+        var teble = vueTable.init({
+            //表格元素
+            el: '#demoTable',
+            //异步接口
+            url: 'demo.json',
+            rows: [
+                { field: 'id', click: 'test' },
+                { field: 'name' },
+                { field: 'age' }
+            ]
+        });
+        w(teble);
+
+
+
+        vueTable.on('test', function (obj) {
+
+            // obj.rows.name = '123';
+
+            obj.app.rows.push({
+                id: 456,
+                name: 'asdf',
+                age: 300
+            });
+            w(obj);
+
+        });
+
+
+    </script>
+
+</body>
+
+</html>
