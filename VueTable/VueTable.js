@@ -36,7 +36,6 @@ var vueTable = function () {
             var $table = $(config.el);
             var $thead = $('<thead/>');
             var $tbody = $('<tbody/>');
-
             $table.append($thead).append($tbody);
 
             $table.addClass('table');
