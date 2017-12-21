@@ -14,8 +14,12 @@
 
     <h1>as</h1>
     <table id="demoTable">
-
     </table>
+
+
+    <script type='text/html' id='test'>
+        <span>{{msg}}</span>
+    </script>
 
 
     <script src="vue.js"></script>
@@ -25,30 +29,34 @@
 
     <script>
 
-        var teble = vueTable.init({
+        var table = vueTable.init({
             //表格元素
             el: '#demoTable',
             //异步接口
             url: 'demo.json',
             rows: [
-                { field: 'id', click: 'test' },
-                { field: 'name' },
-                { field: 'age' }
+                { field: 'id', title: '序号' },
+                { field: 'age', title: '年龄', },
+                { field: 'name', title: '名字', },
+                { title: '操作', tool: '#test' },
+
+
             ]
         });
-        w(teble);
-
+        table.render();
 
 
         vueTable.on('test', function (obj) {
 
-            // obj.rows.name = '123';
+            obj.rows.name = '123';
 
             obj.app.rows.push({
                 id: 456,
                 name: 'asdf',
                 age: 300
             });
+
+
             w(obj);
 
         });

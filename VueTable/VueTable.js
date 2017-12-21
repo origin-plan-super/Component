@@ -1,20 +1,28 @@
+// @ts-nocheck
 var vueTable = function () {
-    var demoTable;
+    var tableApp;
     var obj = {
         init: function (config) {
+            // 注册
 
-            //创建vue对象
+
+
+            //vue对象模板
             var vueObject = {
                 el: config.el,
+                prop: ['msg'],
                 data: {
-                    rows: {}
+                    msg: '123asd',
+                    rows: config.rows,
+                    fields: []
                 },
                 methods: {
                     render: function () {
                         var _this = this;
 
                         $.getJSON(config.url, function (res) {
-                            _this.rows = res;
+                            _this.fields = [];
+                            _this.fields = res;
 
 
                         });
@@ -25,72 +33,29 @@ var vueTable = function () {
 
             //需要传基础字段
             //创建基础结构
-            var table = $(config.el);
-            var thead = $('<thead/>');
-            var tbody = $('<tbody/>');
+            var $table = $(config.el);
+            var $thead = $('<thead/>');
+            var $tbody = $('<tbody/>');
 
-            table.addClass('table');
-            table.addClass('table-bordered table-hover');
+            $table.append($thead).append($tbody);
 
-            var tr = $('<tr/>');
+            $table.addClass('table');
+            $table.addClass('table-bordered table-hover');
 
-            //生成表头
-            for (var i = 0; i < config.rows.length; i++) {
-                var row = config.rows[i];
-                var td = $('<td/>');
-                td.text(row.field);
-                tr.append(td);
-            }
-            thead.append(tr);
+            //创建表头v-for
+            var $tr_$th = $('<tr/>');
+            $tr_$th.html('<th v-for="(item,index) in rows">{{item.title}}</th>');
+            $thead.html($tr_$th);
 
-            var tr = $('<tr/>');
-            tr.attr('v-for', '(item,index) in rows');
-            tr.attr('key', 'item.id');
+            var $tr_$td = $('<tr v-for="(field,i) in fields"></tr>');
+            $tr_$td.html('<td v-for="(value,key) in rows">{{field[value.field]}}<comp></comp></td>');
+            $tbody.html($tr_$td);
 
-            //生成身体
-            for (var i = 0; i < config.rows.length; i++) {
-
-                var row = config.rows[i];
-                var td = $('<td/>');
-                td.text('{{item.' + row.field + '}}');
-                //事件添加
-                if (row.click != null) {
-
-
-                    td.attr('v-on:click', row.click + '(index)');
-                    var event = row.click;
-
-                    vueObject.methods[event] = function (index) {
-                        //这里的this其实是vue的js
-
-                        var o = {
-                            app: this,
-                            rows: this.rows[index],
-                            col: this.rows[index].name,
-                        }
-
-                        obj.eventList[event](o);
-
-                    }
-
-                }
-
-                tr.append(td);
-            }
-
-
-            tbody.append(tr);
+            tableApp = new Vue(vueObject);
 
 
 
-            table.append(thead);
-            table.append(tbody);
-            // $(config.el).append(table);
-
-            demoTable = new Vue(vueObject);
-            demoTable.render();
-
-            return demoTable;
+            return tableApp;
         },
         on: function (event, f) {
             obj.eventList[event] = f;
